@@ -179,6 +179,11 @@ proc run*(w: Webview)=
   while w.loop(1) == 0:
     discard
 
+proc runPolling*(w: Webview, poll: proc(timeout: int); timeout: int) =
+  ## Can be used to merge an async event loop with webviews's event loop.
+  while w.loop(0) == 0:
+    poll(timeout)
+    
 proc open*(title="WebView", url="", width=640, height=480, resizable=true):int {.discardable.} =
   ## Open is a simplified API to open a single native window with a full-size webview in
   ## it. It can be helpful if you want to communicate with the core app using XHR
